@@ -1,6 +1,14 @@
+:root {
+    --page-background: #fffacd;
+    --text-color: #f9703e;
+    --footer-background: #f0e68c;
+    --game-color: #fad6a5;
+    --tile-color: #ffb088;
+}
+
 html{
     font-weight: 300;
-    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     line-height: 1.4;
 }
 
@@ -8,8 +16,8 @@ html{
     width: 100%;
     height: 100vh;
     border: 1px solid black;
-    background-color:lemonchiffon ;
-    
+    background-color: var(--page-background) ;
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,8 +27,6 @@ html{
 .game-container{
     width: 500px;
     height: 100%;
-    /* background-color: lemonchiffon; */
-    
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -30,10 +36,7 @@ html{
 .game-info{
     width: 100%;
     padding: 1rem;
-    /* margin-bottom: 10rem; */
-    /* padding-bottom: 10rem; */
-    /* margin-bottom: 4rem; */
-    /* font-size: 150%; */
+    font-weight: 900;
     display: grid;
     grid-template-columns:  1fr 1fr;
     grid-template-rows: 1fr 1fr;
@@ -48,34 +51,55 @@ html{
 
 .game-name{
     grid-area: name;
+    font-size: 3.5rem;
 }
+
 .game-score-container{
     width: 100%;
     height: 100%;
     grid-area: score;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
+    gap: 0.3rem;
 }
+
+.game-score,
+.game-best{
+    background-color: var(--tile-color);
+    color: var(--game-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 .btn-new-game{
     grid-area: newBtn;
+    border: none;
+    background-color: var(--text-color);
+    color: var(--game-color);
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
 }
 
 
 .game{
-    /* box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.3); */
     width: 90%;
     height: 50%;
     padding: 0.7rem;
     border-radius: 0.5rem;
-    background-color: salmon;
+    background-color: var(--game-color);
     
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
     justify-items: center;
     align-items: center;
-    gap: 10px 10px;
+    gap: 0.63rem;
 
     transform: translateY(-50px);
 }
@@ -83,15 +107,21 @@ html{
 .tile{
     width: 100%;
     height: 100%;
-    background-color: sandybrown;
+    background-color: var(--tile-color);
     border-radius: 0.2rem;
+
+    font-weight: 700;
+    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 
 .game-page-footer{
     width: 100%;
     height: 7%;
-    background-color: khaki;   
+    background-color: var(--footer-background);   
     padding: 0.5rem;
     display: flex;
     justify-content: center;
@@ -99,12 +129,28 @@ html{
 }
 
 .game-page-footer a{
-    font-weight: 400;
+    font-weight: 700;
     margin: 0.2rem;
+    color: var(--text-color);
 }
 
 
 @media only screen and (max-width: 500px){
+    .game-name{
+        font-size: 2.5rem;
+    }
+    
+    .game-score,
+    .game-best{
+        padding: 0.3rem 0.7rem;
+        font-weight: 600;
+    }
+
+    .btn-new-game{
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+    }
+
     .game-container{
         width: 100%;
     }
@@ -112,5 +158,11 @@ html{
     .game{
         width: 280px;
         height: 280px;
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .tile{
+        font-size: 1.30rem;
     }
 }
