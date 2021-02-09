@@ -15,7 +15,13 @@ let emptyTiles = [];
 newGameBtn.addEventListener("click", newGame);
 
 // function that moves on keypress or swipe (game logic)
-gameBoard.addEventListener("keydown", e => boardMove(e.code));
+// gameBoard.addEventListener("keydown", e => boardMove(e.code));
+document.addEventListener("keydown", e => {
+    boardMove(e.code);
+    for(let i = 0; i < gameTiles.length; i++){
+        gameTiles[i].textContent = gameBoardValues[i];
+    }
+});
 
 function newGame(){
     
@@ -57,14 +63,45 @@ function twoOrFour(){
 function boardMove(keyCode){
     switch(keyCode){
         case "ArrowUp":
+            
+            for(let i = 0; i < 12; i++){    
+                if(gameBoardValues[i + 4] !== "" || gameBoardValues[i + 4] !== undefined){
+                    gameBoardValues[i] = gameBoardValues[i + 4];
+                    gameBoardValues[i + 4] = "";
+                }
+            }
+            console.log(gameBoardValues);
             break;
         case "ArrowRight":
+            console.log("RIGHT");
+            for(let i = 15; i >= 0; i--){    
+                if(i % 4 !== 0){
+                    gameBoardValues[i] = gameBoardValues[i - 1];
+                    gameBoardValues[i - 1] = "";
+                }
+            }
+            emptyTiles[0];
             break;
         case "ArrowDown":
+            console.log("DOWN");
+            for(let i = 15; i > 3; i--){    
+                if(gameBoardValues[i - 4] !== "" || gameBoardValues[i - 4] !== undefined){
+                    gameBoardValues[i] = gameBoardValues[i - 4];
+                    gameBoardValues[i - 4] = "";
+                }
+            }
             break;
         case "ArrowLeft":
+            console.log("LEFT");
+            for(let i = 0; i < 16; i++){    
+                if(i % 4 !== 3){
+                    gameBoardValues[i] = gameBoardValues[i + 1];
+                    gameBoardValues[i + 1] = "";
+                }
+            }
             break;
         default:
+            // console.log("OTHER");
             break;
     }
 }
