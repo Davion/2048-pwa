@@ -1,20 +1,20 @@
 const scoreValue = document.querySelector(".game-score-value");
 const bestValue = document.querySelector(".game-best-value");;
+const gameStatus = document.querySelector(".game-status");;
 const newGameBtn = document.querySelector(".btn-new-game");;
 const gameBoard = document.querySelector(".game-board");;
 
 const startingNums = [2, 2, 2, 4];
 const gameTiles = Object.values(gameBoard.childNodes).filter(tile => tile.nodeName !== "#text");
-// console.log(gameTiles);
+console.log(gameTiles);
 
+document.addEventListener("DOMContentLoaded", newGame);
 // new game function that sets up the board and score
 newGameBtn.addEventListener("click", newGame);
 
 // function that moves on keypress or swipe (game logic)
 // gameBoard.addEventListener("keydown", e => boardMove(e.code));
-document.addEventListener("keydown", e => {
-    boardMove(e.code);
-});
+
 
 function newGame(){
     
@@ -26,13 +26,20 @@ function newGame(){
 
     const secondIdx = randomEmptyTileIdx();
     gameTiles[secondIdx].textContent = twoOrFour();
-    // console.log(gameTiles);
+    
+    gameStatus.textContent = "";
+    gameStatus.style.display = "none";
+
+    document.addEventListener("keydown", boardMove);
+
 }
 
 function spawnNumOnEmptyTile(){
     let idx = randomEmptyTileIdx();
-    if(idx !== undefined)
+    if(idx !== undefined){
         gameTiles[idx].textContent = twoOrFour();
+        checkForLose();
+    }
 }
 
 // returns a random index of one of the remaining empty tiles on the game board
@@ -50,18 +57,13 @@ function randomEmptyTileIdx(){
     }
 }
 
-// returns a random number based on a dynamic range of values
-// function getRandomEmptyTile(arrLen){
-//     return Math.floor(Math.random() * arrLen);
-// }
-
 // function that generates a 2 or a 4 in random
 function twoOrFour(){
     return startingNums[Math.floor(Math.random() * startingNums.length)];
 }
 
 function boardMove(keyCode){
-    switch(keyCode){
+    switch(keyCode.code){
         case "ArrowUp":
             console.log("UP");
             moveUp();
@@ -194,6 +196,7 @@ function combineRow(){
             gameTiles[i + 1].textContent = "";
         }
     }
+    checkForWin();
 }
 
 function combineColumn(){
@@ -203,5 +206,28 @@ function combineColumn(){
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 4].textContent = "";
         }
+    }
+    checkForWin();
+}
+
+function checkForWin(){
+    for(let i = 0; i < gameTiles.length; i++){
+        if(gameTiles[i].textContent == 2048){
+            gameStatus.textContent = "You WIN !!!";
+            gameStatus.style.display = "inline";
+            document.removeEventListener("keydown", boardMove);
+        }
+    }
+}
+
+function checkForLose(){
+    let zeros = 0;
+    for(let i = 0; i < gameTiles.length; i++){
+        if(gameTiles[i].textContent === "") zeros++;
+    }
+    if(zeros === 0){
+        gameStatus.textContent = "You LOSE :("
+        gameStatus.style.display = "inline";
+        document.removeEventListener("keydown", boardMove);
     }
 }

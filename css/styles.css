@@ -42,7 +42,7 @@ html{
     grid-template-rows: 1fr 1fr;
     grid-template-areas: 
         "name score"
-        ". newBtn"
+        "status newBtn"
     ;
     gap: 10px 10px;
     justify-items: center;
@@ -52,6 +52,11 @@ html{
 .game-name{
     grid-area: name;
     font-size: 3.5rem;
+}
+
+.game-status{
+    grid-area: status;
+    display: none;
 }
 
 .game-score-container{
