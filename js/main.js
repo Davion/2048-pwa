@@ -5,9 +5,8 @@ const gameBoard = document.querySelector(".game-board");;
 
 const startingNums = [2, 2, 2, 4];
 const gameTiles = Object.values(gameBoard.childNodes).filter(tile => tile.nodeName !== "#text");
+// console.log(gameTiles);
 
-// holds game board values that will be applied to gameTiles
-let gameBoardValues = [];
 // holds empty tiles in relation to gameTiles
 let emptyTiles = [];
 
@@ -18,22 +17,19 @@ newGameBtn.addEventListener("click", newGame);
 // gameBoard.addEventListener("keydown", e => boardMove(e.code));
 document.addEventListener("keydown", e => {
     boardMove(e.code);
-    for(let i = 0; i < gameTiles.length; i++){
-        gameTiles[i].textContent = gameBoardValues[i];
-    }
 });
 
 function newGame(){
     
-    gameBoardValues = [];
+    gameTiles.forEach(tile => {
+        tile.textContent = ""
+    });
     const firstIdx = randomTileSpawn();
-    const secondIdx = randomTileSpawn();
-    gameBoardValues[firstIdx] = 2;
-    gameBoardValues[secondIdx] = twoOrFour();
-    for(let i = 0; i < gameTiles.length; i++){
-        gameTiles[i].textContent = gameBoardValues[i];
-    }
+    gameTiles[firstIdx].textContent = 2;
 
+    const secondIdx = randomTileSpawn();
+    gameTiles[secondIdx].textContent = twoOrFour();
+    // console.log(gameTiles);
 }
 
 // returns a random index of one of the remaining empty tiles on the game board
@@ -63,45 +59,116 @@ function twoOrFour(){
 function boardMove(keyCode){
     switch(keyCode){
         case "ArrowUp":
-            
-            for(let i = 0; i < 12; i++){    
-                if(gameBoardValues[i + 4] !== "" || gameBoardValues[i + 4] !== undefined){
-                    gameBoardValues[i] = gameBoardValues[i + 4];
-                    gameBoardValues[i + 4] = "";
-                }
-            }
-            console.log(gameBoardValues);
+            console.log("UP");
+            moveUp();
             break;
         case "ArrowRight":
             console.log("RIGHT");
-            for(let i = 15; i >= 0; i--){    
-                if(i % 4 !== 0){
-                    gameBoardValues[i] = gameBoardValues[i - 1];
-                    gameBoardValues[i - 1] = "";
-                }
-            }
-            emptyTiles[0];
+            moveRight();
             break;
         case "ArrowDown":
             console.log("DOWN");
-            for(let i = 15; i > 3; i--){    
-                if(gameBoardValues[i - 4] !== "" || gameBoardValues[i - 4] !== undefined){
-                    gameBoardValues[i] = gameBoardValues[i - 4];
-                    gameBoardValues[i - 4] = "";
-                }
-            }
+            moveDown();
             break;
         case "ArrowLeft":
             console.log("LEFT");
-            for(let i = 0; i < 16; i++){    
-                if(i % 4 !== 3){
-                    gameBoardValues[i] = gameBoardValues[i + 1];
-                    gameBoardValues[i + 1] = "";
-                }
-            }
+            moveLeft();
             break;
         default:
             // console.log("OTHER");
             break;
+    }
+}
+
+
+function moveUp(){
+    for(let i = 0; i < 16; i++){
+        if(i < 4){
+            let totalOne = gameTiles[i].textContent;
+            let totalTwo = gameTiles[i + 4].textContent;
+            let totalThree = gameTiles[i + 8].textContent;
+            let totalFour = gameTiles[i + 12].textContent;
+            let row = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
+
+            let filteredRow = row.filter(num => num);
+
+            let missing = 4 - filteredRow.length;
+            let zeros = Array(missing).fill("");
+            let newRow = filteredRow.concat(zeros);
+
+            gameTiles[i].textContent = newRow[0];
+            gameTiles[i + 4].textContent = newRow[1];
+            gameTiles[i + 8].textContent = newRow[2];
+            gameTiles[i + 12].textContent = newRow[3];
+        }
+    }
+}
+
+function moveRight(){
+    for(let i = 0; i < 16; i++){
+        if(i % 4 === 0){
+            let totalOne = gameTiles[i].textContent;
+            let totalTwo = gameTiles[i + 1].textContent;
+            let totalThree = gameTiles[i + 2].textContent;
+            let totalFour = gameTiles[i + 3].textContent;
+            let row = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
+
+            let filteredRow = row.filter(num => num);
+
+            let missing = 4 - filteredRow.length;
+            let zeros = Array(missing).fill("");
+            let newRow = zeros.concat(filteredRow);
+
+            gameTiles[i].textContent = newRow[0];
+            gameTiles[i + 1].textContent = newRow[1];
+            gameTiles[i + 2].textContent = newRow[2];
+            gameTiles[i + 3].textContent = newRow[3];
+        }
+    }
+}
+
+function moveDown(){
+    for(let i = 0; i < 16; i++){
+        if(i < 4){
+            let totalOne = gameTiles[i].textContent;
+            let totalTwo = gameTiles[i + 4].textContent;
+            let totalThree = gameTiles[i + 8].textContent;
+            let totalFour = gameTiles[i + 12].textContent;
+            let row = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
+
+            let filteredRow = row.filter(num => num);
+
+            let missing = 4 - filteredRow.length;
+            let zeros = Array(missing).fill("");
+            let newRow = zeros.concat(filteredRow);
+
+            gameTiles[i].textContent = newRow[0];
+            gameTiles[i + 4].textContent = newRow[1];
+            gameTiles[i + 8].textContent = newRow[2];
+            gameTiles[i + 12].textContent = newRow[3];
+        }
+    }
+}
+
+function moveLeft(){
+    for(let i = 0; i < 16; i++){
+        if(i % 4 === 0){
+            let totalOne = gameTiles[i].textContent;
+            let totalTwo = gameTiles[i + 1].textContent;
+            let totalThree = gameTiles[i + 2].textContent;
+            let totalFour = gameTiles[i + 3].textContent;
+            let row = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
+
+            let filteredRow = row.filter(num => num);
+
+            let missing = 4 - filteredRow.length;
+            let zeros = Array(missing).fill("");
+            let newRow = filteredRow.concat(zeros);
+
+            gameTiles[i].textContent = newRow[0];
+            gameTiles[i + 1].textContent = newRow[1];
+            gameTiles[i + 2].textContent = newRow[2];
+            gameTiles[i + 3].textContent = newRow[3];
+        }
     }
 }
