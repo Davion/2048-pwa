@@ -30,6 +30,8 @@ function newGame(){
     gameStatus.textContent = "";
     gameStatus.style.display = "none";
 
+    scoreValue.textContent = 0;
+
     document.addEventListener("keydown", boardMove);
 
 }
@@ -187,13 +189,16 @@ function moveLeft(){
     }
 }
 
-
+// COMBINE ROW or COLUMN
 function combineRow(){
     for(let i = 0; i < 15; i++){
         if(gameTiles[i].textContent === gameTiles[i + 1].textContent){
             let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 1].textContent);
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 1].textContent = "";
+            console.log(typeof combinedTotal);
+            if(combinedTotal >= 0)
+                updateScore(combinedTotal);
         }
     }
     checkForWin();
@@ -205,11 +210,15 @@ function combineColumn(){
             let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 4].textContent);
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 4].textContent = "";
+            console.log(typeof combinedTotal);
+            if(combinedTotal >= 0)
+                updateScore(combinedTotal);
         }
     }
     checkForWin();
 }
 
+// WIN -- LOSE
 function checkForWin(){
     for(let i = 0; i < gameTiles.length; i++){
         if(gameTiles[i].textContent == 2048){
@@ -230,4 +239,17 @@ function checkForLose(){
         gameStatus.style.display = "inline";
         document.removeEventListener("keydown", boardMove);
     }
+}
+
+
+// SCORE & BEST
+function updateScore(val){
+    let currentScore = parseInt(scoreValue.textContent);
+    // console.log(currentScore);
+    let newScore = currentScore + val;
+    scoreValue.textContent = newScore;
+}
+
+function updateBest(){
+
 }
