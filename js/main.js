@@ -6,7 +6,8 @@ const gameBoard = document.querySelector(".game-board");;
 
 const startingNums = [2, 2, 2, 4];
 const gameTiles = Object.values(gameBoard.childNodes).filter(tile => tile.nodeName !== "#text");
-console.log(gameTiles);
+let tempArr = gameTiles;
+console.log(tempArr);
 
 document.addEventListener("DOMContentLoaded", newGame);
 // new game function that sets up the board and score
@@ -40,7 +41,11 @@ function spawnNumOnEmptyTile(){
     let idx = randomEmptyTileIdx();
     if(idx !== undefined){
         gameTiles[idx].textContent = twoOrFour();
-        checkForLose();
+        if(checkForLose()){
+            gameStatus.textContent = "You LOSE :("
+            gameStatus.style.display = "inline";
+            document.removeEventListener("keydown", boardMove);
+        }
     }
 }
 
@@ -192,13 +197,14 @@ function moveLeft(){
 // COMBINE ROW or COLUMN
 function combineRow(){
     for(let i = 0; i < 15; i++){
-        if(gameTiles[i].textContent === gameTiles[i + 1].textContent){
+        if(i % 4 !== 3 && gameTiles[i].textContent === gameTiles[i + 1].textContent){
             let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 1].textContent);
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 1].textContent = "";
-            console.log(typeof combinedTotal);
-            if(combinedTotal >= 0)
+            if(combinedTotal >= 0){
                 updateScore(combinedTotal);
+                updateBest();
+            }
         }
     }
     checkForWin();
@@ -210,9 +216,10 @@ function combineColumn(){
             let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 4].textContent);
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 4].textContent = "";
-            console.log(typeof combinedTotal);
-            if(combinedTotal >= 0)
+            if(combinedTotal >= 0){
                 updateScore(combinedTotal);
+                updateBest();
+            }
         }
     }
     checkForWin();
@@ -230,26 +237,29 @@ function checkForWin(){
 }
 
 function checkForLose(){
-    let zeros = 0;
     for(let i = 0; i < gameTiles.length; i++){
-        if(gameTiles[i].textContent === "") zeros++;
+        if(gameTiles[i].textContent === "") return false;
+
+        if(i % 4 !== 3 && gameTiles[i].textContent === gameTiles[i + 1].textContent) return false;
+
+        if(i < 12 && gameTiles[i].textContent === gameTiles[i + 4].textContent) return false;
     }
-    if(zeros === 0){
-        gameStatus.textContent = "You LOSE :("
-        gameStatus.style.display = "inline";
-        document.removeEventListener("keydown", boardMove);
-    }
+
+    return true;
 }
 
 
 // SCORE & BEST
 function updateScore(val){
     let currentScore = parseInt(scoreValue.textContent);
-    // console.log(currentScore);
     let newScore = currentScore + val;
     scoreValue.textContent = newScore;
 }
 
 function updateBest(){
-
+    let currentScore = parseInt(scoreValue.textContent);
+    let currentBest = parseInt(bestValue.textContent);
+    if(currentScore > currentBest) {
+        bestValue.textContent = currentScore;
+    }
 }
