@@ -6,17 +6,12 @@ const gameBoard = document.querySelector(".game-board");;
 
 const startingNums = [2, 2, 2, 4];
 const gameTiles = Object.values(gameBoard.childNodes).filter(tile => tile.nodeName !== "#text");
-let tempArr = gameTiles;
-console.log(tempArr);
 
 document.addEventListener("DOMContentLoaded", newGame);
-// new game function that sets up the board and score
+
 newGameBtn.addEventListener("click", newGame);
 
-// function that moves on keypress or swipe (game logic)
-// gameBoard.addEventListener("keydown", e => boardMove(e.code));
-
-
+// new game function that sets up the board and score
 function newGame(){
     
     gameTiles.forEach(tile => {
@@ -64,43 +59,45 @@ function randomEmptyTileIdx(){
     }
 }
 
-// function that generates a 2 or a 4 in random
+// function that generates a 2 or a 4 in random based on the startingNums array
 function twoOrFour(){
     return startingNums[Math.floor(Math.random() * startingNums.length)];
 }
 
+// function that moves on keypress or swipe (game logic)
 function boardMove(keyCode){
+    let beforeMove = gameTiles.map(tile => tile.textContent);
+    let afterMove;
     switch(keyCode.code){
         case "ArrowUp":
-            console.log("UP");
             moveUp();
             combineColumn();
             moveUp();
-            spawnNumOnEmptyTile();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         case "ArrowRight":
-            console.log("RIGHT");
             moveRight();
             combineRow();
             moveRight();
-            spawnNumOnEmptyTile();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         case "ArrowDown":
-            console.log("DOWN");
             moveDown();
             combineColumn();
             moveDown();
-            spawnNumOnEmptyTile();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         case "ArrowLeft":
-            console.log("LEFT");
             moveLeft();
             combineRow();
             moveLeft();
-            spawnNumOnEmptyTile();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         default:
-            // console.log("OTHER");
             break;
     }
 }
@@ -262,4 +259,14 @@ function updateBest(){
     if(currentScore > currentBest) {
         bestValue.textContent = currentScore;
     }
+}
+
+
+function arraysEqual(arr1, arr2){
+    for(let i = 0; i < 16; i++){
+        if(arr1[i] !== arr2[i]){
+            return false;
+        }
+    }
+    return true;
 }
