@@ -7,6 +7,20 @@ const gameBoard = document.querySelector(".game-board");;
 const startingNums = [2, 2, 2, 4];
 const gameTiles = Object.values(gameBoard.childNodes).filter(tile => tile.nodeName !== "#text");
 
+let colors = {
+    "": "#ffb088",
+    "2": "#FFCC80",
+    "4": "#FFD180",
+    "8": "#FFB74D",
+    "16": "#FFAB40",
+    "32": "#FFA726",
+    "64": "#FF9800",
+    "128": "#FB8C00",
+    "512": "#F57C00",
+    "1024": "#EF6C00",
+    "2048": "#E65100"
+};
+
 document.addEventListener("DOMContentLoaded", newGame);
 
 newGameBtn.addEventListener("click", newGame);
@@ -16,12 +30,17 @@ function newGame(){
     
     gameTiles.forEach(tile => {
         tile.textContent = ""
+        tile.style.background = colors[""];
     });
     const firstIdx = randomEmptyTileIdx();
     gameTiles[firstIdx].textContent = 2;
+    gameTiles[firstIdx].style.background = colors[2];
 
     const secondIdx = randomEmptyTileIdx();
-    gameTiles[secondIdx].textContent = twoOrFour();
+    let randomTwoOrFour = twoOrFour();
+    gameTiles[secondIdx].textContent = randomTwoOrFour;
+    gameTiles[secondIdx].style.background = colors[randomTwoOrFour];
+    
     
     gameStatus.textContent = "";
     gameStatus.style.display = "none";
@@ -35,7 +54,9 @@ function newGame(){
 function spawnNumOnEmptyTile(){
     let idx = randomEmptyTileIdx();
     if(idx !== undefined){
-        gameTiles[idx].textContent = twoOrFour();
+        let randomTwoOrFour = twoOrFour();
+        gameTiles[idx].textContent = randomTwoOrFour;
+        gameTiles[idx].style.background = colors[randomTwoOrFour];
         if(checkForLose()){
             gameStatus.textContent = "You LOSE :("
             gameStatus.style.display = "inline";
@@ -117,10 +138,10 @@ function moveUp(){
         let zeros = Array(missing).fill("");
         let newRow = filteredRow.concat(zeros);
 
-        gameTiles[i].textContent = newRow[0];
-        gameTiles[i + 4].textContent = newRow[1];
-        gameTiles[i + 8].textContent = newRow[2];
-        gameTiles[i + 12].textContent = newRow[3];
+        for(let j = 0; j < 4; j++){
+            gameTiles[i + (j * 4)].textContent = newRow[j];
+            gameTiles[i + (j * 4)].style.background = colors[newRow[j]];
+        }
     }
 }
 
@@ -139,10 +160,10 @@ function moveRight(){
             let zeros = Array(missing).fill("");
             let newRow = zeros.concat(filteredRow);
 
-            gameTiles[i].textContent = newRow[0];
-            gameTiles[i + 1].textContent = newRow[1];
-            gameTiles[i + 2].textContent = newRow[2];
-            gameTiles[i + 3].textContent = newRow[3];
+            for(let j = 0; j < 4; j++){
+                gameTiles[i + j].textContent = newRow[j];
+                gameTiles[i + j].style.background = colors[newRow[j]];
+            }
         }
     }
 }
@@ -161,10 +182,10 @@ function moveDown(){
         let zeros = Array(missing).fill("");
         let newRow = zeros.concat(filteredRow);
 
-        gameTiles[i].textContent = newRow[0];
-        gameTiles[i + 4].textContent = newRow[1];
-        gameTiles[i + 8].textContent = newRow[2];
-        gameTiles[i + 12].textContent = newRow[3];
+        for(let j = 0; j < 4; j++){
+            gameTiles[i + (j * 4)].textContent = newRow[j];
+            gameTiles[i + (j * 4)].style.background = colors[newRow[j]];
+        }
     }
 }
 
@@ -183,10 +204,10 @@ function moveLeft(){
             let zeros = Array(missing).fill("");
             let newRow = filteredRow.concat(zeros);
 
-            gameTiles[i].textContent = newRow[0];
-            gameTiles[i + 1].textContent = newRow[1];
-            gameTiles[i + 2].textContent = newRow[2];
-            gameTiles[i + 3].textContent = newRow[3];
+            for(let j = 0; j < 4; j++){
+                gameTiles[i + j].textContent = newRow[j];
+                gameTiles[i + j].style.background = colors[newRow[j]];
+            }
         }
     }
 }
