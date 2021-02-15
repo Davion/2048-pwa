@@ -6,7 +6,7 @@ const gameBoard = document.querySelector(".game-board");;
 
 const startingNums = [2, 2, 2, 4];
 const gameTiles = Object.values(gameBoard.childNodes).filter(tile => tile.nodeName !== "#text");
-
+console.log(gameTiles);
 let colors = {
     "": "#ffb088",
     "2": "#FFCC80",
@@ -57,6 +57,11 @@ function spawnNumOnEmptyTile(){
         let randomTwoOrFour = twoOrFour();
         gameTiles[idx].textContent = randomTwoOrFour;
         gameTiles[idx].style.background = colors[randomTwoOrFour];
+        gameTiles[idx].classList.add("new-tile");
+        setTimeout(() => {
+            gameTiles[idx].classList.remove("new-tile");
+            console.log("removed");
+        }, 300);
         if(checkForLose()){
             gameStatus.textContent = "You LOSE :("
             gameStatus.style.display = "inline";

@@ -139,6 +139,23 @@ html{
     color: var(--text-color);
 }
 
+.new-tile{
+    animation-name: appear;
+    animation-duration: 300ms;
+}
+
+@keyframes appear {
+    0%{
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 
 @media only screen and (max-width: 500px){
     .game-name{
