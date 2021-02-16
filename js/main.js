@@ -7,6 +7,7 @@ const gameBoard = document.querySelector(".game-board");;
 const startingNums = [2, 2, 2, 4];
 const gameTiles = Object.values(gameBoard.childNodes).filter(tile => tile.nodeName !== "#text");
 console.log(gameTiles);
+
 let colors = {
     "": "#ffb088",
     "2": "#FFCC80",
@@ -16,6 +17,7 @@ let colors = {
     "32": "#FFA726",
     "64": "#FF9800",
     "128": "#FB8C00",
+    "256": "#F57C00",
     "512": "#F57C00",
     "1024": "#EF6C00",
     "2048": "#E65100"
@@ -48,8 +50,9 @@ function newGame(){
     scoreValue.textContent = 0;
 
     document.addEventListener("keydown", boardMove);
-
 }
+
+
 
 function spawnNumOnEmptyTile(){
     let idx = randomEmptyTileIdx();
@@ -60,7 +63,6 @@ function spawnNumOnEmptyTile(){
         gameTiles[idx].classList.add("new-tile");
         setTimeout(() => {
             gameTiles[idx].classList.remove("new-tile");
-            console.log("removed");
         }, 300);
         if(checkForLose()){
             gameStatus.textContent = "You LOSE :("
@@ -97,28 +99,28 @@ function boardMove(keyCode){
     switch(keyCode.code){
         case "ArrowUp":
             moveUp();
-            combineColumn();
+            combineColumnUp();
             moveUp();
             afterMove = gameTiles.map(tile => tile.textContent);
             if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         case "ArrowRight":
             moveRight();
-            combineRow();
+            combineRowRight();
             moveRight();
             afterMove = gameTiles.map(tile => tile.textContent);
             if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         case "ArrowDown":
             moveDown();
-            combineColumn();
+            combineColumnDown();
             moveDown();
             afterMove = gameTiles.map(tile => tile.textContent);
             if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         case "ArrowLeft":
             moveLeft();
-            combineRow();
+            combineRowLeft();
             moveLeft();
             afterMove = gameTiles.map(tile => tile.textContent);
             if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
@@ -218,12 +220,19 @@ function moveLeft(){
 }
 
 // COMBINE ROW or COLUMN
-function combineRow(){
+function combineRowLeft(){
     for(let i = 0; i < 15; i++){
-        if(i % 4 !== 3 && gameTiles[i].textContent === gameTiles[i + 1].textContent){
+        if(i % 4 !== 3 && !Number.isNaN(parseInt(gameTiles[i].textContent)) && gameTiles[i].textContent === gameTiles[i + 1].textContent){
             let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 1].textContent);
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 1].textContent = "";
+            gameTiles[i].classList.add("merged-tile");
+            animationEndCallback = (e) => {
+                gameTiles[i].removeEventListener("animationend", animationEndCallback);
+                gameTiles[i].classList.remove("merged-tile");
+                console.log("removed");
+            }
+            gameTiles[i].addEventListener("animationend", animationEndCallback);
             if(combinedTotal >= 0){
                 updateScore(combinedTotal);
                 updateBest();
@@ -233,12 +242,61 @@ function combineRow(){
     checkForWin();
 }
 
-function combineColumn(){
+function combineRowRight(){
+    for(let i = 15; i >= 0; i--){
+        if(i % 4 !== 3 && !Number.isNaN(parseInt(gameTiles[i].textContent)) && gameTiles[i].textContent === gameTiles[i + 1].textContent){
+            let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 1].textContent);
+            gameTiles[i].textContent = "";
+            gameTiles[i + 1].textContent = combinedTotal;
+            gameTiles[i + 1].classList.add("merged-tile");
+            animationEndCallback = (e) => {
+                gameTiles[i + 1].removeEventListener("animationend", animationEndCallback);
+                gameTiles[i + 1].classList.remove("merged-tile");
+                console.log("removed");
+            }
+            gameTiles[i + 1].addEventListener("animationend", animationEndCallback);
+            if(combinedTotal >= 0){
+                updateScore(combinedTotal);
+                updateBest();
+            }
+        }
+    }
+    checkForWin();
+}
+
+function combineColumnUp(){
     for(let i = 0; i < 12; i++){
-        if(gameTiles[i].textContent === gameTiles[i + 4].textContent){
+        if(!Number.isNaN(parseInt(gameTiles[i].textContent)) && gameTiles[i].textContent === gameTiles[i + 4].textContent){
             let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 4].textContent);
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 4].textContent = "";
+            gameTiles[i].classList.add("merged-tile");
+            animationEndCallback = (e) => {
+                gameTiles[i].removeEventListener("animationend", animationEndCallback);
+                gameTiles[i].classList.remove("merged-tile");
+            }
+            gameTiles[i].addEventListener("animationend", animationEndCallback);
+            if(combinedTotal >= 0){
+                updateScore(combinedTotal);
+                updateBest();
+            }
+        }
+    }
+    checkForWin();
+}
+
+function combineColumnDown(){
+    for(let i = 11; i > 0; i--){
+        if(!Number.isNaN(parseInt(gameTiles[i].textContent)) && gameTiles[i].textContent === gameTiles[i + 4].textContent){
+            let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 4].textContent);
+            gameTiles[i].textContent = "";
+            gameTiles[i + 4].textContent = combinedTotal;
+            gameTiles[i + 4].classList.add("merged-tile");
+            animationEndCallback = (e) => {
+                gameTiles[i + 4].removeEventListener("animationend", animationEndCallback);
+                gameTiles[i + 4].classList.remove("merged-tile");
+            }
+            gameTiles[i + 4].addEventListener("animationend", animationEndCallback);
             if(combinedTotal >= 0){
                 updateScore(combinedTotal);
                 updateBest();
