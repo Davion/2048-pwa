@@ -290,7 +290,7 @@ function combineColumnUp(){
 }
 
 function combineColumnDown(){
-    for(let i = 11; i > 0; i--){
+    for(let i = 11; i >= 0; i--){
         if(!Number.isNaN(parseInt(gameTiles[i].textContent)) && gameTiles[i].textContent === gameTiles[i + 4].textContent){
             let combinedTotal = parseInt(gameTiles[i].textContent) + parseInt(gameTiles[i + 4].textContent);
             gameTiles[i].textContent = "";
