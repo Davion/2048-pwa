@@ -23,6 +23,7 @@ let colors = {
     "2048": "#E65100"
 };
 
+
 document.addEventListener("DOMContentLoaded", newGame);
 
 newGameBtn.addEventListener("click", newGame);
@@ -60,10 +61,15 @@ function spawnNumOnEmptyTile(){
         let randomTwoOrFour = twoOrFour();
         gameTiles[idx].textContent = randomTwoOrFour;
         gameTiles[idx].style.background = colors[randomTwoOrFour];
-        gameTiles[idx].classList.add("new-tile");
-        setTimeout(() => {
+        if(gameTiles[idx].classList.contains("new-tile")){
             gameTiles[idx].classList.remove("new-tile");
-        }, 300);
+        }
+        gameTiles[idx].classList.add("new-tile");
+        let animationEndCallback = (e) => {
+            gameTiles[idx].removeEventListener("animationend", animationEndCallback);
+            gameTiles[idx].classList.remove("new-tile");
+        }
+        gameTiles[idx].addEventListener("animationend", animationEndCallback);
         if(checkForLose()){
             gameStatus.textContent = "You LOSE :("
             gameStatus.style.display = "inline";
@@ -227,10 +233,9 @@ function combineRowLeft(){
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 1].textContent = "";
             gameTiles[i].classList.add("merged-tile");
-            animationEndCallback = (e) => {
+            let animationEndCallback = (e) => {
                 gameTiles[i].removeEventListener("animationend", animationEndCallback);
                 gameTiles[i].classList.remove("merged-tile");
-                console.log("removed");
             }
             gameTiles[i].addEventListener("animationend", animationEndCallback);
             if(combinedTotal >= 0){
@@ -249,10 +254,9 @@ function combineRowRight(){
             gameTiles[i].textContent = "";
             gameTiles[i + 1].textContent = combinedTotal;
             gameTiles[i + 1].classList.add("merged-tile");
-            animationEndCallback = (e) => {
+            let animationEndCallback = (e) => {
                 gameTiles[i + 1].removeEventListener("animationend", animationEndCallback);
                 gameTiles[i + 1].classList.remove("merged-tile");
-                console.log("removed");
             }
             gameTiles[i + 1].addEventListener("animationend", animationEndCallback);
             if(combinedTotal >= 0){
@@ -271,7 +275,7 @@ function combineColumnUp(){
             gameTiles[i].textContent = combinedTotal;
             gameTiles[i + 4].textContent = "";
             gameTiles[i].classList.add("merged-tile");
-            animationEndCallback = (e) => {
+            let animationEndCallback = (e) => {
                 gameTiles[i].removeEventListener("animationend", animationEndCallback);
                 gameTiles[i].classList.remove("merged-tile");
             }
@@ -292,7 +296,7 @@ function combineColumnDown(){
             gameTiles[i].textContent = "";
             gameTiles[i + 4].textContent = combinedTotal;
             gameTiles[i + 4].classList.add("merged-tile");
-            animationEndCallback = (e) => {
+            let animationEndCallback = (e) => {
                 gameTiles[i + 4].removeEventListener("animationend", animationEndCallback);
                 gameTiles[i + 4].classList.remove("merged-tile");
             }
