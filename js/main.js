@@ -24,7 +24,29 @@ let colors = {
 };
 
 
-document.addEventListener("DOMContentLoaded", newGame);
+document.addEventListener("DOMContentLoaded", () => {
+    if(localStorage.getItem("gameBoard") !== null){
+        let gameBoard = JSON.parse(localStorage.getItem("gameBoard"));
+        let i = 0;
+        gameTiles.forEach(tile => {
+            tile.textContent = gameBoard[i];
+            tile.style.background = colors[gameBoard[i]];
+            i++;
+        });
+
+        if(localStorage.getItem("gameScore") !== null){
+            scoreValue.textContent = localStorage.getItem("gameScore");
+        }
+        
+        if(localStorage.getItem("gameBest") !== null){
+            bestValue.textContent = localStorage.getItem("gameBest");
+        }
+
+        document.addEventListener("keydown", boardMove);
+    }else{
+        newGame();
+    }
+});
 
 newGameBtn.addEventListener("click", newGame);
 
@@ -49,6 +71,8 @@ function newGame(){
     gameStatus.style.display = "none";
 
     scoreValue.textContent = 0;
+    localStorage.setItem("gameScore", scoreValue.textContent);
+    saveLocalGame();
 
     document.addEventListener("keydown", boardMove);
 }
@@ -134,6 +158,7 @@ function boardMove(keyCode){
         default:
             break;
     }
+    saveLocalGame();
 }
 
 
@@ -339,6 +364,8 @@ function updateScore(val){
     let currentScore = parseInt(scoreValue.textContent);
     let newScore = currentScore + val;
     scoreValue.textContent = newScore;
+
+    localStorage.setItem("gameScore", scoreValue.textContent);
 }
 
 function updateBest(){
@@ -346,10 +373,18 @@ function updateBest(){
     let currentBest = parseInt(bestValue.textContent);
     if(currentScore > currentBest) {
         bestValue.textContent = currentScore;
+        localStorage.setItem("gameBest", bestValue.textContent);
     }
 }
 
+// LOCAL STORAGE
+function saveLocalGame(){
+    let gameBoard = [];
+    gameTiles.forEach(tile => gameBoard.push(tile.textContent));
+    localStorage.setItem("gameBoard", JSON.stringify(gameBoard));
+}
 
+// Helper functions
 function arraysEqual(arr1, arr2){
     for(let i = 0; i < 16; i++){
         if(arr1[i] !== arr2[i]){
