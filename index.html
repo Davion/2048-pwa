@@ -34,7 +34,9 @@
                     New Game
                 </button>
             </div>
-            <div class="game-board">
+            <div class="game-board" 
+                data-swipe-threshold="100"
+                data-swipe-timeout="250">
                 <div class="game-tile"></div>
                 <div class="game-tile"></div>
                 <div class="game-tile"></div>
@@ -59,5 +61,6 @@
     </div>
     
     <script src="js/main.js"></script>
+    <script src="js/swiped-events.min.js"></script>
 </body>
 </html>

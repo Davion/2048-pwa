@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }else{
         newGame();
     }
+
+    gameBoard.addEventListener("swiped", boardSwipe);
 });
 
 newGameBtn.addEventListener("click", newGame);
@@ -73,8 +75,11 @@ function newGame(){
     scoreValue.textContent = 0;
     localStorage.setItem("gameScore", scoreValue.textContent);
     saveLocalGame();
-
+    
+    document.removeEventListener("keydown", boardMove);
     document.addEventListener("keydown", boardMove);
+    gameBoard.removeEventListener("swiped", boardSwipe);
+    gameBoard.addEventListener("swiped", boardSwipe);
 }
 
 
@@ -98,6 +103,7 @@ function spawnNumOnEmptyTile(){
             gameStatus.textContent = "You LOSE :("
             gameStatus.style.display = "inline";
             document.removeEventListener("keydown", boardMove);
+            gameBoard.removeEventListener("swiped", boardSwipe);
         }
     }
 }
@@ -122,7 +128,7 @@ function twoOrFour(){
     return startingNums[Math.floor(Math.random() * startingNums.length)];
 }
 
-// function that moves on keypress or swipe (game logic)
+// function that moves on keypress
 function boardMove(keyCode){
     let beforeMove = gameTiles.map(tile => tile.textContent);
     let afterMove;
@@ -149,6 +155,45 @@ function boardMove(keyCode){
             if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
             break;
         case "ArrowLeft":
+            moveLeft();
+            combineRowLeft();
+            moveLeft();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
+            break;
+        default:
+            break;
+    }
+    saveLocalGame();
+}
+
+// function that moves on swipe
+function boardSwipe(keyCode){
+    let beforeMove = gameTiles.map(tile => tile.textContent);
+    let afterMove;
+    switch(keyCode.detail.dir){
+        case "up":
+            moveUp();
+            combineColumnUp();
+            moveUp();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
+            break;
+        case "right":
+            moveRight();
+            combineRowRight();
+            moveRight();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
+            break;
+        case "down":
+            moveDown();
+            combineColumnDown();
+            moveDown();
+            afterMove = gameTiles.map(tile => tile.textContent);
+            if(!arraysEqual(beforeMove, afterMove)) spawnNumOnEmptyTile();
+            break;
+        case "left":
             moveLeft();
             combineRowLeft();
             moveLeft();
@@ -342,6 +387,7 @@ function checkForWin(){
             gameStatus.textContent = "You WIN !!!";
             gameStatus.style.display = "inline";
             document.removeEventListener("keydown", boardMove);
+            gameBoard.removeEventListener("swiped", boardSwipe);
         }
     }
 }
@@ -392,4 +438,8 @@ function arraysEqual(arr1, arr2){
         }
     }
     return true;
+}
+
+function display(e){
+    console.log(e.detail.dir);
 }
