@@ -1,4 +1,4 @@
-const staticCascheName = "2048-app-static-v1";
+const staticCascheName = "2048-app-static-v2";
 const assets = [
   "/2048-pwa/",
   "/2048-pwa/index.html",
