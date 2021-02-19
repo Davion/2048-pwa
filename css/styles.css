@@ -5,6 +5,10 @@
     --game-color: #fad6a5;
     --tile-color: #ffb088;
 }
+html,
+body{
+    overscroll-behavior-y: contain;
+}
 
 html{
     font-weight: 300;
