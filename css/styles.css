@@ -110,7 +110,7 @@ html{
     align-items: center;
     gap: 0.63rem;
 
-    transform: translateY(-50px);
+    /* transform: translateY(-50px); */
 }
 
 .game-tile{
