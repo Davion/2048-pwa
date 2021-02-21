@@ -8,6 +8,8 @@
 html,
 body{
     overscroll-behavior-y: contain;
+    position: fixed;
+    overflow: hidden;
 }
 
 html{
@@ -17,7 +19,7 @@ html{
 }
 
 .game-page-container{
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     border: 1px solid black;
     background-color: var(--page-background) ;
