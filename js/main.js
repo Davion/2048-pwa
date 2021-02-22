@@ -15,7 +15,7 @@ let colors = {
     "16": { background: "#FFAB40", text: "#f9703e" },
     "32": { background: "#FFA726", text: "#f9703e" },
     "64": { background: "#FF9800", text: "#f9703e" },
-    "128": { background: "#FB8C00", text: "#f9703e" },
+    "128": { background: "#FB8C00", text: "#fad6a5" },
     "256": { background: "#F57C00", text: "#fad6a5" },
     "512": { background: "#F57C00", text: "#fad6a5" },
     "1024": { background: "#EF6C00", text: "#fad6a5" },
