@@ -43,7 +43,7 @@ self.addEventListener("fetch", fetchEvent => {
         })
       ).catch(() => {
         if(fetchEvent.request.url.indexOf(".html") > -1 || fetchEvent.request.url === "https://github.com/Davion"){
-          return caches.match("/todo-app-js-pwa/fallback.html");
+          return caches.match("/2048-pwa/fallback.html");
         }
       })
     }).catch(err => console.log("issue opening cache on fetch", err))
